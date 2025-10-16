@@ -6,6 +6,8 @@
 - Dependencies added: Spring Web, Spring Boot DevTools, Lombok, Validation
 - added Product model class
 - added DTOs (Data Transfer Objects) implemented to handle product data
-- POST /api/v1/products — Add a new product to the inventory
+- POST /api/v1/products - Add a new product to the inventory
 - Request body is validated using: @NotBlank, @Min, @Valid
 - Endpoint tested successfully using tools Postman
+- GET /api/v1/products - Fetch the list of all products 200 OK with a list of products
+- 
