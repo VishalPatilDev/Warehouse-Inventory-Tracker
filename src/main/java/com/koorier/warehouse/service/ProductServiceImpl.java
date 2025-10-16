@@ -29,7 +29,12 @@ public class ProductServiceImpl implements ProductService{
 	@Autowired
 	private AlertService alertService;
 	
-	 
+	 @PostConstruct
+	    public void init() {
+	        // register alert observer
+	        observers.add(alertService);
+	    }
+
 	@Override
 	public Product addProduct(ProductRequestDto dto) {
 		// TODO Auto-generated method stub
@@ -80,8 +85,16 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public ProductResponseDto getProductById(String id) {
 		// TODO Auto-generated method stub
-		
-		return null;
+		Product p = store.get(id);
+		if(p == null) {
+			throw new ProductNotFoundException("Product NOt Found with id : "+id);
+		}
+		return ProductResponseDto.builder()
+				.productId(p.getProductId())
+				.name(p.getName())
+				.quantity(p.getQuantity())
+				.reorderThreshold(p.getReorderThreshold())
+				.build();
 	}
 
 	@Override

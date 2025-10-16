@@ -81,4 +81,9 @@ public class ProductController {
     public ResponseEntity<?> getAllProducts(){
     	return ResponseEntity.ok(service.getAllProducts());
     }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProductById(@PathVariable String id){
+    	return ResponseEntity.ok(service.getProductById(id.toString()));
+    }
 }
