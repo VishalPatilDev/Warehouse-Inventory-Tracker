@@ -29,12 +29,7 @@ public class ProductServiceImpl implements ProductService{
 	@Autowired
 	private AlertService alertService;
 	
-	 @PostConstruct
-	    public void init() {
-	        // register alert observer
-	        observers.add(alertService);
-	    }
-
+	 
 	@Override
 	public Product addProduct(ProductRequestDto dto) {
 		// TODO Auto-generated method stub
