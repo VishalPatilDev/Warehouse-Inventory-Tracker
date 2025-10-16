@@ -9,5 +9,5 @@
 - POST /api/v1/products - Add a new product to the inventory
 - Request body is validated using: @NotBlank, @Min, @Valid
 - Endpoint tested successfully using tools Postman
-- GET /api/v1/products - Fetch the list of all products 200 OK with a list of products
+- GET /api/v1/products - Fetch the list of all products - 200 OK with a list of products
 - 
