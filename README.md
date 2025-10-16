@@ -1,6 +1,6 @@
 # Warehouse-Inventory-Tracker
 
-# Day 1 - Project setup
+# 1 - Project setup
 
 - Spring Boot project generated using Spring Initializr
 - Dependencies added: Spring Web, Spring Boot DevTools, Lombok, Validation
@@ -10,4 +10,10 @@
 - Request body is validated using: @NotBlank, @Min, @Valid
 - Endpoint tested successfully using tools Postman
 - GET /api/v1/products - Fetch the list of all products - 200 OK with a list of products
-- 
+
+# 2 - Progress
+- Implemented Observer pattern for event-driven stock alerts.
+- Added receiveShipment(add Qty) and fulfillOrder(decrease Qty) APIs.
+- Enhanced GlobalExceptionHandler for invalid product and stock errors.
+- Verified workflow with sample POST/PUT requests.
+- Added getOrderById API and tested with POSTMAN.
