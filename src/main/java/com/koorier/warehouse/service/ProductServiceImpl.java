@@ -1,5 +1,6 @@
 package com.koorier.warehouse.service;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +16,8 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public Product addProduct(ProductRequestDto dto) {
-		 String id = "SKU-" + UUID.randomUUID().toString().substring(0,8);
+		// TODO Auto-generated method stub
+		 String id = "SKU-" + UUID.randomUUID().toString().substring(0,8); //Stock Keeping Unit
 	        Product p = Product.builder()
 	                .productId(id)
 	                .name(dto.getName())
@@ -24,6 +26,12 @@ public class ProductServiceImpl implements ProductService{
 	                .build();
 	        store.put(id, p);
 	        return p;
+	}
+
+	@Override
+	public Collection<Product> getAllProducts() {
+		// TODO Auto-generated method stub
+		return store.values();
 	}
 
 }
