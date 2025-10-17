@@ -6,7 +6,8 @@ import com.koorier.warehouse.dto.ProductRequestDto;
 import com.koorier.warehouse.dto.ProductResponseDto;
 import com.koorier.warehouse.dto.ShipmentDto;
 import com.koorier.warehouse.model.Product;
-import com.koorier.warehouse.service.ProductService;
+import com.koorier.warehouse.service.Warehouse;
+
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/products")
 
-public class ProductController {
+public class WarehouseController {
 	@Autowired
-    private ProductService service;
+    private Warehouse service;
    
     @PostMapping
     public ResponseEntity<ProductResponseDto> addProduct(@Valid @RequestBody ProductRequestDto dto) { 
@@ -43,7 +44,7 @@ public class ProductController {
                 .build());
     }
 
-    @PutMapping("/order")
+    @PutMapping("/v/order")
     public ResponseEntity<ProductResponseDto> fulfillOrder(@Valid @RequestBody OrderDto dto) {
         Product p = service.fulfillOrder(dto);
         return ResponseEntity.ok(ProductResponseDto.builder()
@@ -55,7 +56,7 @@ public class ProductController {
     }
     
     //log only logs to the spring boot side not on frontend or pstman so created FulfillmentDto to show alert on postman
-    @PutMapping("/v/order")
+    @PutMapping("/order")
     public ResponseEntity<FulfillmentResponse> fulfill(@Valid @RequestBody OrderDto dto) {
         Product p = service.fulfillOrder(dto);
         
@@ -70,10 +71,9 @@ public class ProductController {
         response.setProduct(responseDto);
 
         if (p.getQuantity() < p.getReorderThreshold()) {
-            response.setAlert("⚠️ Restock Alert: Low stock for " + p.getName() +
+            response.setAlert("Restock Alert: Low stock for " + p.getName() +
                               " (Remaining: " + p.getQuantity() + ")");
         }
-
         return ResponseEntity.ok(response);
     }
     
@@ -85,5 +85,16 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable String id){
     	return ResponseEntity.ok(service.getProductById(id.toString()));
+    }
+    
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteProductById(@PathVariable String id){
+    	service.deleteProduct(id);
+    	return ResponseEntity.ok("deleted product with id "+id+"!");
+    }
+    
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateProductById(@PathVariable String id,@RequestBody ProductRequestDto req){
+    	return ResponseEntity.ok(service.updateProduct(id, req));
     }
 }

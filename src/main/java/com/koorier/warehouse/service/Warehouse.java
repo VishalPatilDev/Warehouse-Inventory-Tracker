@@ -10,7 +10,7 @@ import java.util.Collection;
 
 import org.springframework.stereotype.Service;
 @Service
-public interface ProductService {
+public interface Warehouse {
     public Product addProduct(ProductRequestDto dto);
     
     public Collection<Product> getAllProducts();

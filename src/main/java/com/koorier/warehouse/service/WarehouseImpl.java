@@ -22,7 +22,7 @@ import com.koorier.warehouse.observer.AlertService;
 import jakarta.annotation.PostConstruct;
 
 @Service
-public class ProductServiceImpl implements ProductService{
+public class WarehouseImpl implements Warehouse{
 	private final Map<String, Product> store = new ConcurrentHashMap<>();
 	private final List<AlertService> observers = new ArrayList<>();
 	
@@ -100,13 +100,17 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public ProductResponseDto updateProduct(String id, ProductRequestDto request) {
 		// TODO Auto-generated method stub
-		return null;
+		Product p = store.get(id);
+		if(p== null) throw new ProductNotFoundException("Product with id : "+id+"Not found !");
+		return ProductResponseDto.builder().name(request.getName()).quantity(request.getQuantity()).reorderThreshold(request.getReorderThreshold()).build();
 	}
 
 	@Override
 	public void deleteProduct(String id) {
 		// TODO Auto-generated method stub
-		
+		Product p = store.get(id);
+		if(p == null) throw new ProductNotFoundException("Product with id : "+id+"not found !!");
+		store.remove(id);
 	}
 	
 	
