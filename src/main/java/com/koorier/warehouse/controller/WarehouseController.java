@@ -94,7 +94,7 @@ public class WarehouseController {
     }
     
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProductById(@PathVariable String id,@RequestBody ProductRequestDto req){
+    public ResponseEntity<?> updateProductById(@PathVariable String id,@Valid @RequestBody ProductRequestDto req){
     	return ResponseEntity.ok(service.updateProduct(id, req));
     }
 }
