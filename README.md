@@ -17,3 +17,15 @@
 - Enhanced GlobalExceptionHandler for invalid product and stock errors.
 - Verified workflow with sample POST/PUT requests.
 - Added getOrderById API and tested with POSTMAN.
+
+  # Crud Operations
+- POST | /api/v1/products | Add new product |
+- PUT  | /api/v1/products/shipment | Receive shipment |
+- PUT  | /api/v1/products/order | Fulfill order |
+- GET  | /api/v1/products | Get all products |
+- GET  | /api/v1/products/{id} | Get product by ID |
+- PUT  | /api/v1/products/update/{id} | Update product |
+- DELETE | /api/v1/products/delete/{id} | Delete product |
+
+
+  
