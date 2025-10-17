@@ -21,7 +21,6 @@ import com.koorier.warehouse.dto.ProductResponseDto;
 import com.koorier.warehouse.dto.ShipmentDto;
 import com.koorier.warehouse.model.Product;
 import com.koorier.warehouse.observer.AlertService;
-
 import jakarta.annotation.PostConstruct;
 
 
