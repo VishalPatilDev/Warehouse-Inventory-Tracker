@@ -1,5 +1,8 @@
 package com.koorier.warehouse.service;
 
+
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,10 +24,14 @@ import com.koorier.warehouse.observer.AlertService;
 
 import jakarta.annotation.PostConstruct;
 
+
 @Service
 public class WarehouseImpl implements Warehouse{
+	private final String INVENTORY_FILE = "warehouse_inventory.dat";
 	private final Map<String, Product> store = new ConcurrentHashMap<>();
 	private final List<AlertService> observers = new ArrayList<>();
+	
+	private final Object lock = new Object();
 	
 	@Autowired
 	private AlertService alertService;
@@ -38,6 +45,7 @@ public class WarehouseImpl implements Warehouse{
 	@Override
 	public Product addProduct(ProductRequestDto dto) {
 		// TODO Auto-generated method stub
+		synchronized(lock) {
 		 String id = "SKU-" + UUID.randomUUID().toString().substring(0,8); //Stock Keeping Unit
 	        Product p = Product.builder()
 	                .productId(id)
@@ -46,7 +54,10 @@ public class WarehouseImpl implements Warehouse{
 	                .reorderThreshold(dto.getReorderThreshold())
 	                .build();
 	        store.put(id, p);
+	        System.out.println("Product Added - "+p.getName());
+	        saveInventoryToFile();
 	        return p;
+		}
 	}
 
 	@Override
@@ -58,15 +69,18 @@ public class WarehouseImpl implements Warehouse{
 	@Override
 	public Product receiveShipment(ShipmentDto dto) {
 		// TODO Auto-generated method stub
+		synchronized(lock) {
 		Product p = store.get(dto.getProductId());
         if (p == null) throw new ProductNotFoundException("Invalid productId: " + dto.getProductId());
         p.setQuantity(p.getQuantity() + dto.getQuantity());
         return p;
+		}
 	}
 
 	@Override
 	public Product fulfillOrder(OrderDto dto) {
 		// TODO Auto-generated method stub
+		synchronized(lock) {
 		Product p = store.get(dto.getProductId());
         if (p == null) throw new ProductNotFoundException("Invalid productId: " + dto.getProductId());
 
@@ -80,6 +94,7 @@ public class WarehouseImpl implements Warehouse{
         	observers.forEach(obs -> obs.onLowStock(p));
         }
         return p;
+		}
 	}
 	
 	@Override
@@ -95,6 +110,7 @@ public class WarehouseImpl implements Warehouse{
 				.quantity(p.getQuantity())
 				.reorderThreshold(p.getReorderThreshold())
 				.build();
+		
 	}
 
 	@Override
@@ -113,6 +129,15 @@ public class WarehouseImpl implements Warehouse{
 		store.remove(id);
 	}
 	
+	private void saveInventoryToFile() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(
+                new FileOutputStream(INVENTORY_FILE))) {
+            oos.writeObject(store);
+            System.out.println("Product Saved to Inventory !!");
+        } catch (Exception e) {
+        	System.out.println("Error Saving product to Inventory !!");
+        }
+    }
 	
 
 }
