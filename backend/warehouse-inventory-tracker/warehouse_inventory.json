@@ -17,14 +17,38 @@
     "quantity" : 6,
     "reorderThreshold" : 3
   },
+  "SKU-2c4a1603" : {
+    "productId" : "SKU-2c4a1603",
+    "name" : "Keyboard",
+    "quantity" : 6,
+    "reorderThreshold" : 3
+  },
+  "SKU-1af7dd81" : {
+    "productId" : "SKU-1af7dd81",
+    "name" : "Keyboard",
+    "quantity" : 6,
+    "reorderThreshold" : 3
+  },
   "SKU-95950a14" : {
     "productId" : "SKU-95950a14",
     "name" : "Keyboard",
     "quantity" : 6,
     "reorderThreshold" : 3
   },
+  "SKU-76a62ce1" : {
+    "productId" : "SKU-76a62ce1",
+    "name" : "Keyboard",
+    "quantity" : 6,
+    "reorderThreshold" : 3
+  },
   "SKU-9e854b5a" : {
     "productId" : "SKU-9e854b5a",
+    "name" : "Keyboard",
+    "quantity" : 6,
+    "reorderThreshold" : 3
+  },
+  "SKU-8ca92dc0" : {
+    "productId" : "SKU-8ca92dc0",
     "name" : "Keyboard",
     "quantity" : 6,
     "reorderThreshold" : 3

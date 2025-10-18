@@ -1,7 +1,9 @@
 # Warehouse-Inventory-Tracker
 
 
-# TechStack
+## TechStack
+
+### Backend (Spring Boot)
 - Java 17+
 
 - Spring Boot 3.x
@@ -13,6 +15,28 @@
 - Custom Exception Handling
 
 - Global Exception Handling
+
+- Observer Design Pattern (for low-stock alerts)
+
+- File-based persistence (local JSON file)
+
+### Frontend (React + Vite)
+- React 18+
+- Vite
+- JavaScript (ES6+)
+- Fetch API for backend communication
+- Simple UI for product viewing
+
+## Project Structure
+Koorier-ProblemStatement/
+│
+├── backend/
+│ └── warehouse-inventory-tracker/ # Backend (Spring Boot)
+│
+├── frontend/
+│ └── warehouse-frontend/ # Frontend (React + Vite)
+│
+└── README.md # You're here!
 
 # Project setup
 
@@ -70,6 +94,11 @@
 - log.info for successful saves and loads
 
 - log.error for errors during file operations
+
+# Added basic frontend 
+- View all products in a table
+
+- Fetch button to load products from the backend
 
 
   

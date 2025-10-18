@@ -7,10 +7,9 @@ const API_BASE = 'http://localhost:8080/api/v1/products';
 function App() {
   const [products, setProducts] = useState([]);
 
-  const addProducts = async () =>{
-    try{
-      
-    }catch(err){
+  const addProducts = async () => {
+    try {
+    } catch (err) {
       console.log(err);
     }
   }
