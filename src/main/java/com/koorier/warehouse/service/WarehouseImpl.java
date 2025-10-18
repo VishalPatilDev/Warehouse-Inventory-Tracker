@@ -2,12 +2,6 @@ package com.koorier.warehouse.service;
 
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.koorier.warehouse.custom_exception.InsufficientStockException;
 import com.koorier.warehouse.custom_exception.ProductNotFoundException;
 import com.koorier.warehouse.dto.OrderDto;
@@ -27,13 +23,18 @@ import com.koorier.warehouse.dto.ShipmentDto;
 import com.koorier.warehouse.model.Product;
 import com.koorier.warehouse.observer.AlertService;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 @Service
 public class WarehouseImpl implements Warehouse{
-	private final String INVENTORY_FILE = "warehouse_inventory.dat";
+	private final String INVENTORY_FILE = "warehouse_inventory.json";
 	private final Map<String, Product> store = new ConcurrentHashMap<>();
 	private final List<AlertService> observers = new ArrayList<>();
+	
+	private final ObjectMapper objectMapper = new ObjectMapper()
+            .enable(SerializationFeature.INDENT_OUTPUT); // pretty print
 	
 	private final Object lock = new Object();
 	
@@ -44,6 +45,7 @@ public class WarehouseImpl implements Warehouse{
 	    public void init() {
 	        // register alert observer
 	        observers.add(alertService);
+	        loadInventoryFromFile();
 	    }
 
 	@Override
@@ -58,7 +60,8 @@ public class WarehouseImpl implements Warehouse{
 	                .reorderThreshold(dto.getReorderThreshold())
 	                .build();
 	        store.put(id, p);
-	        System.out.println("Product Added - "+p.getName());
+//	        System.out.println("Product Added - "+p.getName());
+	        log.info("{} -  Product Added !",p.getName());
 	        saveInventoryToFile();
 	        return p;
 		}
@@ -67,6 +70,7 @@ public class WarehouseImpl implements Warehouse{
 	@Override
 	public Collection<Product> getAllProducts() {
 		// TODO Auto-generated method stub
+		loadInventoryFromFile();
 		return store.values();
 	}
 
@@ -134,21 +138,32 @@ public class WarehouseImpl implements Warehouse{
 	}
 	
 	private void saveInventoryToFile() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(INVENTORY_FILE))) {
-            for(Product p : store.values()) {
-            	pw.print("{ ");
-            	pw.print("ID : "+p.getProductId()+" , ");
-            	pw.print("Name : "+p.getName()+" , ");
-            	pw.print("Qty : "+p.getQuantity()+" , ");
-            	pw.print("ReorderThresh : "+p.getReorderThreshold());
-            	pw.print(" }");
-            	pw.println();
-            }
-            System.out.println("Product Saved to Inventory !!");
+        try {
+        	objectMapper.writeValue(new File(INVENTORY_FILE), store);
+//            System.out.println("Product Saved to Inventory !!");
+        	log.info("Products saved {} ",store.size());
         } catch (Exception e) {
-        	System.out.println("Error Saving product to Inventory !!");
+//        	System.out.println("Error Saving product to Inventory !!");
+        	log.error(e.getMessage());
         }
     }
+	
+	private void loadInventoryFromFile() {
+        File file = new File(INVENTORY_FILE);
+        if (!file.exists()) {
+            log.info("No existing inventory file found. Starting fresh.");
+            return;
+        }
+        try {
+            Map<String, Product> loaded = objectMapper.readValue(file,
+                    objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Product.class));
+            store.putAll(loaded);
+            log.info("Inventory loaded: {} products", loaded.size());
+        } catch (Exception e) {
+            log.error("Error loading inventory: {}", e.getMessage());
+        }
+    }
+
 	
 	
 

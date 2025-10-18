@@ -27,7 +27,7 @@
 
 # Progress
 - Implemented Observer pattern for event-driven stock alerts.
-- Added receiveShipment(add Qty) and fulfillOrder(decrease Qty) APIs.
+- Added APIs for receiveShipment (add Qty) and fulfillOrder (decrease Qty).
 - Enhanced GlobalExceptionHandler for invalid product and stock errors.
 - Verified workflow with sample POST/PUT requests.
 - Added getOrderById API and tested with POSTMAN.
@@ -58,7 +58,18 @@
 - DELETE | /api/v1/products/delete/{id} | Delete product |
 
 
-# Working with Persistent storage using file serialization
+# Persistent Storage Using File Serialization
+- Product inventory data is persisted locally in a JSON file (warehouse_inventory.json) using Jackson.
+
+- Inventory is saved automatically on each update to ensure data durability.
+
+- On application startup, the inventory is loaded from the JSON file if it exists, otherwise starts freshly.
+
+- Logging is used to track persistence events:
+
+- log.info for successful saves and loads
+
+- log.error for errors during file operations
 
 
   
