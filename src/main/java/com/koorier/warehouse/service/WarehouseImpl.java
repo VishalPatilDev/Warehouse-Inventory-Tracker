@@ -1,8 +1,13 @@
 package com.koorier.warehouse.service;
 
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -129,14 +134,22 @@ public class WarehouseImpl implements Warehouse{
 	}
 	
 	private void saveInventoryToFile() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream(INVENTORY_FILE))) {
-            oos.writeObject(store);
+        try (PrintWriter pw = new PrintWriter(new FileWriter(INVENTORY_FILE))) {
+            for(Product p : store.values()) {
+            	pw.print("{ ");
+            	pw.print("ID : "+p.getProductId()+" , ");
+            	pw.print("Name : "+p.getName()+" , ");
+            	pw.print("Qty : "+p.getQuantity()+" , ");
+            	pw.print("ReorderThresh : "+p.getReorderThreshold());
+            	pw.print(" }");
+            	pw.println();
+            }
             System.out.println("Product Saved to Inventory !!");
         } catch (Exception e) {
         	System.out.println("Error Saving product to Inventory !!");
         }
     }
+	
 	
 
 }
