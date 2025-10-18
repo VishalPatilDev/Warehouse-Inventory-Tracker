@@ -1,4 +1,10 @@
 {
+  "SKU-ff6f00c5" : {
+    "productId" : "SKU-ff6f00c5",
+    "name" : "laptop",
+    "quantity" : 0,
+    "reorderThreshold" : 7
+  },
   "SKU-4bd0272c" : {
     "productId" : "SKU-4bd0272c",
     "name" : "Keyboard",
