@@ -13,17 +13,17 @@ import org.springframework.stereotype.Service;
 public interface Warehouse {
     public Product addProduct(ProductRequestDto dto);
     
-    public Collection<Product> getAllProducts();
+//    public Collection<Product> getAllProducts();
     
-    public Product receiveShipment(ShipmentDto dto);
+//    public Product receiveShipment(ShipmentDto dto);
     
-    public Product fulfillOrder(OrderDto dto);
+//    public Product fulfillOrder(OrderDto dto);
     
-    public ProductResponseDto getProductById(String id);
+//    public ProductResponseDto getProductById(String id);
     
-    public ProductResponseDto updateProduct(String id, ProductRequestDto request);
+//    public ProductResponseDto updateProduct(String id, ProductRequestDto request);
     
-    public void deleteProduct(String id);
+//    public void deleteProduct(String id);
     
     
     

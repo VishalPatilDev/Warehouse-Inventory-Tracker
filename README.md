@@ -100,5 +100,10 @@ Koorier-ProblemStatement/
 
 - Fetch button to load products from the backend
 
+# Implementing Multi-Warehouse Support
+- Changed how products are stored: now each warehouse has its own product list, so we can manage multiple warehouses separately.
+
+- When adding a new product, we now also save which warehouse it belongs to, using the warehouseId from the requestDto.
+
 
   

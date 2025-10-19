@@ -18,5 +18,7 @@ private String name;
 private int quantity = 0;
 @Min(value = 0, message = "reorderThreshold must be >= 0")
 private int reorderThreshold = 0;
+@NotBlank(message = "Warehouse Id is required")
+private String warehouseId;
 }
 

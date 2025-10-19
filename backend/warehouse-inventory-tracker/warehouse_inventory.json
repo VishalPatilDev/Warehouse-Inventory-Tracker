@@ -1,56 +1,16 @@
 {
-  "SKU-ff6f00c5" : {
-    "productId" : "SKU-ff6f00c5",
-    "name" : "laptop",
-    "quantity" : 0,
-    "reorderThreshold" : 7
-  },
-  "SKU-4bd0272c" : {
-    "productId" : "SKU-4bd0272c",
-    "name" : "Keyboard",
-    "quantity" : 6,
-    "reorderThreshold" : 3
-  },
-  "SKU-fe9cf805" : {
-    "productId" : "SKU-fe9cf805",
-    "name" : "Keyboard",
-    "quantity" : 6,
-    "reorderThreshold" : 3
-  },
-  "SKU-2c4a1603" : {
-    "productId" : "SKU-2c4a1603",
-    "name" : "Keyboard",
-    "quantity" : 6,
-    "reorderThreshold" : 3
-  },
-  "SKU-1af7dd81" : {
-    "productId" : "SKU-1af7dd81",
-    "name" : "Keyboard",
-    "quantity" : 6,
-    "reorderThreshold" : 3
-  },
-  "SKU-95950a14" : {
-    "productId" : "SKU-95950a14",
-    "name" : "Keyboard",
-    "quantity" : 6,
-    "reorderThreshold" : 3
-  },
-  "SKU-76a62ce1" : {
-    "productId" : "SKU-76a62ce1",
-    "name" : "Keyboard",
-    "quantity" : 6,
-    "reorderThreshold" : 3
-  },
-  "SKU-9e854b5a" : {
-    "productId" : "SKU-9e854b5a",
-    "name" : "Keyboard",
-    "quantity" : 6,
-    "reorderThreshold" : 3
-  },
-  "SKU-8ca92dc0" : {
-    "productId" : "SKU-8ca92dc0",
-    "name" : "Keyboard",
-    "quantity" : 6,
-    "reorderThreshold" : 3
+  "PUNE-411004" : {
+    "SKU-3918556d" : {
+      "productId" : "SKU-3918556d",
+      "name" : "Laptop",
+      "quantity" : 10,
+      "reorderThreshold" : 3
+    },
+    "SKU-14ab8463" : {
+      "productId" : "SKU-14ab8463",
+      "name" : "Laptop",
+      "quantity" : 10,
+      "reorderThreshold" : 3
+    }
   }
 }

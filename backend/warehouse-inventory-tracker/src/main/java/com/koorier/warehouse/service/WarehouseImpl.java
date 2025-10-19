@@ -30,7 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class WarehouseImpl implements Warehouse{
 	private final String INVENTORY_FILE = "warehouse_inventory.json";
-	private final Map<String, Product> store = new ConcurrentHashMap<>();
+//	private final Map<String, Product> store = new ConcurrentHashMap<>();
+	//Multiple WArehouses
+	private final Map<String,Map<String,Product>> warehouses = new ConcurrentHashMap<>();
 	private final List<AlertService> observers = new ArrayList<>();
 	
 	private final ObjectMapper objectMapper = new ObjectMapper()
@@ -45,13 +47,20 @@ public class WarehouseImpl implements Warehouse{
 	    public void init() {
 	        // register alert observer
 	        observers.add(alertService);
-	        loadInventoryFromFile();
+//	        loadInventoryFromFile();
 	    }
+	 
+	 private Map<String,Product> getProductsFromWare(String wareID){
+//		 return warehouses.get(wareID); //Null ptr excepn when adding new product
+		 //when user addding new product with new warehouse new map should be created
+		 return warehouses.computeIfAbsent(wareID, p->new ConcurrentHashMap<>());
+	 }
 
 	@Override
 	public Product addProduct(ProductRequestDto dto) {
 		// TODO Auto-generated method stub
 		synchronized(lock) {
+			Map<String,Product> store = getProductsFromWare(dto.getWarehouseId());
 		 String id = "SKU-" + UUID.randomUUID().toString().substring(0,8); //Stock Keeping Unit
 	        Product p = Product.builder()
 	                .productId(id)
@@ -67,102 +76,124 @@ public class WarehouseImpl implements Warehouse{
 		}
 	}
 
-	@Override
-	public Collection<Product> getAllProducts() {
-		// TODO Auto-generated method stub
-		loadInventoryFromFile();
-		return store.values();
-	}
+//	@Override
+//	public Collection<Product> getAllProducts() {
+//		// TODO Auto-generated method stub
+//		synchronized(lock) {
+//		loadInventoryFromFile();
+//		return store.values();
+//		}
+//	}
 
-	@Override
-	public Product receiveShipment(ShipmentDto dto) {
-		// TODO Auto-generated method stub
-		synchronized(lock) {
-		Product p = store.get(dto.getProductId());
-        if (p == null) throw new ProductNotFoundException("Invalid productId: " + dto.getProductId());
-        p.setQuantity(p.getQuantity() + dto.getQuantity());
-        return p;
-		}
-	}
+//	@Override
+//	public Product receiveShipment(ShipmentDto dto) {
+//		// TODO Auto-generated method stub
+//		synchronized(lock) {
+//		Product p = store.get(dto.getProductId());
+//        if (p == null) throw new ProductNotFoundException("Invalid productId: " + dto.getProductId());
+//        p.setQuantity(p.getQuantity() + dto.getQuantity());
+//        return p;
+//		}
+//	}
 
-	@Override
-	public Product fulfillOrder(OrderDto dto) {
-		// TODO Auto-generated method stub
-		synchronized(lock) {
-		Product p = store.get(dto.getProductId());
-        if (p == null) throw new ProductNotFoundException("Invalid productId: " + dto.getProductId());
-
-        if (p.getQuantity() < dto.getQuantity()) {
-            throw new InsufficientStockException("Insufficient stock for " + p.getName());
-        }
-        
-        p.setQuantity(p.getQuantity() - dto.getQuantity());
-        
-        if (p.getQuantity() < p.getReorderThreshold()) {
-        	observers.forEach(obs -> obs.onLowStock(p));
-        }
-        return p;
-		}
-	}
+//	@Override
+//	public Product fulfillOrder(OrderDto dto) {
+//		// TODO Auto-generated method stub
+//		synchronized(lock) {
+//		Product p = store.get(dto.getProductId());
+//        if (p == null) throw new ProductNotFoundException("Invalid productId: " + dto.getProductId());
+//
+//        if (p.getQuantity() < dto.getQuantity()) {
+//            throw new InsufficientStockException("Insufficient stock for " + p.getName());
+//        }
+//        
+//        p.setQuantity(p.getQuantity() - dto.getQuantity());
+//        
+//        if (p.getQuantity() < p.getReorderThreshold()) {
+//        	observers.forEach(obs -> obs.onLowStock(p));
+//        }
+//        return p;
+//		}
+//	}
 	
-	@Override
-	public ProductResponseDto getProductById(String id) {
-		// TODO Auto-generated method stub
-		Product p = store.get(id);
-		if(p == null) {
-			throw new ProductNotFoundException("Product NOt Found with id : "+id);
-		}
-		return ProductResponseDto.builder()
-				.productId(p.getProductId())
-				.name(p.getName())
-				.quantity(p.getQuantity())
-				.reorderThreshold(p.getReorderThreshold())
-				.build();
-		
-	}
+//	@Override
+//	public ProductResponseDto getProductById(String id) {
+//		// TODO Auto-generated method stub
+//		synchronized(lock) {
+//		Product p = store.get(id);
+//		if(p == null) {
+//			throw new ProductNotFoundException("Product NOt Found with id : "+id);
+//		}
+//		return ProductResponseDto.builder()
+//				.productId(p.getProductId())
+//				.name(p.getName())
+//				.quantity(p.getQuantity())
+//				.reorderThreshold(p.getReorderThreshold())
+//				.build();
+//		}
+//	}
 
-	@Override
-	public ProductResponseDto updateProduct(String id, ProductRequestDto request) {
-		// TODO Auto-generated method stub
-		Product p = store.get(id);
-		if(p== null) throw new ProductNotFoundException("Product with id : "+id+"Not found !");
-		return ProductResponseDto.builder().name(request.getName()).quantity(request.getQuantity()).reorderThreshold(request.getReorderThreshold()).build();
-	}
+//	@Override
+//	public ProductResponseDto updateProduct(String id, ProductRequestDto request) {
+//		// TODO Auto-generated method stub
+//		synchronized(lock) {
+//		Product p = store.get(id);
+//		if(p== null) throw new ProductNotFoundException("Product with id : "+id+"Not found !");
+//		 p.setName(request.getName());
+//	        p.setQuantity(request.getQuantity());
+//	        p.setReorderThreshold(request.getReorderThreshold());
+//
+//	        saveInventoryToFile();
+//	        
+//	        return ProductResponseDto.builder()
+//	                .productId(p.getProductId())
+//	                .name(p.getName())
+//	                .quantity(p.getQuantity())
+//	                .reorderThreshold(p.getReorderThreshold())
+//	                .build();
+//		}
+//	}
 
-	@Override
-	public void deleteProduct(String id) {
-		// TODO Auto-generated method stub
-		Product p = store.get(id);
-		if(p == null) throw new ProductNotFoundException("Product with id : "+id+"not found !!");
-		store.remove(id);
-	}
+//	@Override
+//	public void deleteProduct(String id) {
+//		// TODO Auto-generated method stub
+//		synchronized(lock) {
+//		Product p = store.get(id);
+//		if(p == null) throw new ProductNotFoundException("Product with id : "+id+"not found !!");
+//		store.remove(id);
+//		}
+//	}
 	
 	private void saveInventoryToFile() {
+		synchronized(lock) {
         try {
-        	objectMapper.writeValue(new File(INVENTORY_FILE), store);
+        	objectMapper.writeValue(new File(INVENTORY_FILE), /*store*/warehouses);
 //            System.out.println("Product Saved to Inventory !!");
-        	log.info("Products saved {} ",store.size());
+        	log.info("Products saved {} ",/*store*/warehouses.size());
         } catch (Exception e) {
 //        	System.out.println("Error Saving product to Inventory !!");
         	log.error(e.getMessage());
         }
+		}
     }
 	
-	private void loadInventoryFromFile() {
-        File file = new File(INVENTORY_FILE);
-        if (!file.exists()) {
-            log.info("No existing inventory file found. Starting fresh.");
-            return;
-        }
-        try {
-            Map<String, Product> loaded = objectMapper.readValue(file,
-                    objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Product.class));
-            store.putAll(loaded);
-            log.info("Inventory loaded: {} products", loaded.size());
-        } catch (Exception e) {
-            log.error("Error loading inventory: {}", e.getMessage());
-        }
-    }
+//	private void loadInventoryFromFile() {
+//		synchronized(lock) {
+//        File file = new File(INVENTORY_FILE);
+//        if (!file.exists()) {
+//            log.info("No existing inventory file found. Starting fresh.");
+//            return;
+//        }
+//        try {
+//            Map<String, Product> loaded = objectMapper.readValue(file,
+//                    objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Product.class));
+//            store.putAll(loaded);
+//            log.info("Inventory loaded: {} products", loaded.size());
+//        } catch (Exception e) {
+//            log.error("Error loading inventory: {}", e.getMessage());
+//        }
+//		}
+//    }
 
 	
 	

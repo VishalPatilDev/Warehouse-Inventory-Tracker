@@ -17,4 +17,6 @@ public class OrderDto {
 
     @Min(value = 1, message = "quantity must be > 0")
     private int quantity;
+    @NotBlank(message = "Warehouse Id is required")
+    private String warehouseId;
 }
