@@ -76,50 +76,61 @@ public class WarehouseImpl implements Warehouse{
 		}
 	}
 
-//	@Override
-//	public Collection<Product> getAllProducts() {
-//		// TODO Auto-generated method stub
-//		synchronized(lock) {
+	@Override
+	public Collection<Product> getAllProducts() {
+		// TODO Auto-generated method stub
+		synchronized(lock) {
 //		loadInventoryFromFile();
 //		return store.values();
-//		}
-//	}
-
-//	@Override
-//	public Product receiveShipment(ShipmentDto dto) {
-//		// TODO Auto-generated method stub
-//		synchronized(lock) {
-//		Product p = store.get(dto.getProductId());
-//        if (p == null) throw new ProductNotFoundException("Invalid productId: " + dto.getProductId());
-//        p.setQuantity(p.getQuantity() + dto.getQuantity());
-//        return p;
-//		}
-//	}
-
-//	@Override
-//	public Product fulfillOrder(OrderDto dto) {
-//		// TODO Auto-generated method stub
-//		synchronized(lock) {
-//		Product p = store.get(dto.getProductId());
-//        if (p == null) throw new ProductNotFoundException("Invalid productId: " + dto.getProductId());
-//
-//        if (p.getQuantity() < dto.getQuantity()) {
-//            throw new InsufficientStockException("Insufficient stock for " + p.getName());
-//        }
-//        
-//        p.setQuantity(p.getQuantity() - dto.getQuantity());
-//        
-//        if (p.getQuantity() < p.getReorderThreshold()) {
-//        	observers.forEach(obs -> obs.onLowStock(p));
-//        }
-//        return p;
-//		}
-//	}
+			List<Product> pdts = new ArrayList<>();
+			warehouses.values().forEach(p->pdts.addAll(p.values()));
+			return pdts;
+		}
+	}
 	
-//	@Override
-//	public ProductResponseDto getProductById(String id) {
-//		// TODO Auto-generated method stub
-//		synchronized(lock) {
+	public Collection<Product> getProductsByWarehouse(String warehouseId) {
+        synchronized (lock) {
+            return getProductsFromWare(warehouseId).values();
+        }
+    }
+
+	@Override
+	public Product receiveShipment(ShipmentDto dto) {
+		// TODO Auto-generated method stub
+		synchronized(lock) {
+			Map<String, Product> store = getProductsFromWare(dto.getWarehouseId());
+		Product p = store.get(dto.getProductId());
+        if (p == null) throw new ProductNotFoundException("Invalid productId: " + dto.getProductId());
+        p.setQuantity(p.getQuantity() + dto.getQuantity());
+        return p;
+		}
+	}
+
+	@Override
+	public Product fulfillOrder(OrderDto dto) {
+		// TODO Auto-generated method stub
+		synchronized(lock) {
+			Map<String, Product> store = getProductsFromWare(dto.getWarehouseId());
+		Product p = store.get(dto.getProductId());
+        if (p == null) throw new ProductNotFoundException("Invalid productId: " + dto.getProductId());
+
+        if (p.getQuantity() < dto.getQuantity()) {
+            throw new InsufficientStockException("Insufficient stock for " + p.getName());
+        }
+        
+        p.setQuantity(p.getQuantity() - dto.getQuantity());
+        
+        if (p.getQuantity() < p.getReorderThreshold()) {
+        	observers.forEach(obs -> obs.onLowStock(p));
+        }
+        return p;
+		}
+	}
+	
+	@Override
+	public ProductResponseDto getProductById(String id) {
+		// TODO Auto-generated method stub
+		synchronized(lock) {
 //		Product p = store.get(id);
 //		if(p == null) {
 //			throw new ProductNotFoundException("Product NOt Found with id : "+id);
@@ -130,39 +141,50 @@ public class WarehouseImpl implements Warehouse{
 //				.quantity(p.getQuantity())
 //				.reorderThreshold(p.getReorderThreshold())
 //				.build();
-//		}
-//	}
+			for (Map<String, Product> store : warehouses.values()) {
+                Product p = store.get(id);
+                if (p != null)
+                    return ProductResponseDto.builder()
+                            .productId(p.getProductId())
+                            .name(p.getName())
+                            .quantity(p.getQuantity())
+                            .reorderThreshold(p.getReorderThreshold())
+                            .build();
+            }
+            throw new ProductNotFoundException("Product Not Found with id: " + id);
+		}
+	}
 
-//	@Override
-//	public ProductResponseDto updateProduct(String id, ProductRequestDto request) {
-//		// TODO Auto-generated method stub
-//		synchronized(lock) {
-//		Product p = store.get(id);
-//		if(p== null) throw new ProductNotFoundException("Product with id : "+id+"Not found !");
-//		 p.setName(request.getName());
-//	        p.setQuantity(request.getQuantity());
-//	        p.setReorderThreshold(request.getReorderThreshold());
-//
-//	        saveInventoryToFile();
-//	        
-//	        return ProductResponseDto.builder()
-//	                .productId(p.getProductId())
-//	                .name(p.getName())
-//	                .quantity(p.getQuantity())
-//	                .reorderThreshold(p.getReorderThreshold())
-//	                .build();
-//		}
-//	}
+	@Override
+	public ProductResponseDto updateProduct(String id, ProductRequestDto request) {
+		// TODO Auto-generated method stub
+		synchronized(lock) {
+			Map<String, Product> store = getProductsFromWare(request.getWarehouseId());
+		Product p = store.get(id);
+		if(p== null) throw new ProductNotFoundException("Product with id : "+id+"Not found in warehouse "+request.getWarehouseId());
+		 p.setName(request.getName());
+	        p.setQuantity(request.getQuantity());
+	        p.setReorderThreshold(request.getReorderThreshold());
 
-//	@Override
-//	public void deleteProduct(String id) {
-//		// TODO Auto-generated method stub
-//		synchronized(lock) {
-//		Product p = store.get(id);
-//		if(p == null) throw new ProductNotFoundException("Product with id : "+id+"not found !!");
-//		store.remove(id);
-//		}
-//	}
+	        saveInventoryToFile();
+	        
+	        return ProductResponseDto.builder()
+	                .productId(p.getProductId())
+	                .name(p.getName())
+	                .quantity(p.getQuantity())
+	                .reorderThreshold(p.getReorderThreshold())
+	                .build();
+		}
+	}
+
+	@Override
+	public void deleteProduct(String id) {
+		// TODO Auto-generated method stub
+		synchronized(lock) {
+			warehouses.values().forEach(store -> store.remove(id));
+			saveInventoryToFile();
+		}
+	}
 	
 	private void saveInventoryToFile() {
 		synchronized(lock) {
@@ -177,23 +199,23 @@ public class WarehouseImpl implements Warehouse{
 		}
     }
 	
-//	private void loadInventoryFromFile() {
-//		synchronized(lock) {
-//        File file = new File(INVENTORY_FILE);
-//        if (!file.exists()) {
-//            log.info("No existing inventory file found. Starting fresh.");
-//            return;
-//        }
-//        try {
-//            Map<String, Product> loaded = objectMapper.readValue(file,
-//                    objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Product.class));
-//            store.putAll(loaded);
-//            log.info("Inventory loaded: {} products", loaded.size());
-//        } catch (Exception e) {
-//            log.error("Error loading inventory: {}", e.getMessage());
-//        }
-//		}
-//    }
+	private void loadInventoryFromFile() {
+		synchronized(lock) {
+        File file = new File(INVENTORY_FILE);
+        if (!file.exists()) {
+            log.info("No existing inventory file found. Starting fresh.");
+            return;
+        }
+        try {
+            Map<String,Map<String, Product>> loaded = objectMapper.readValue(file,
+                    objectMapper.getTypeFactory().constructMapType(Map.class, String.class, objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Product.class).getClass()));
+            /*store*/warehouses.putAll(loaded);
+            log.info("Inventory loaded: {} products", loaded.size());
+        } catch (Exception e) {
+            log.error("Error loading inventory: {}", e.getMessage());
+        }
+		}
+    }
 
 	
 	
