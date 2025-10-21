@@ -1,109 +1,193 @@
-# Warehouse-Inventory-Tracker
+# 🚚 Warehouse Inventory Tracker
 
+A full-stack inventory management system for tracking products across multiple warehouses. Built with Spring Boot (Java 17) on the backend and React + Vite on the frontend. Supports CRUD operations, persistent storage, low-stock alerts, and warehouse-specific inventory.
 
-## TechStack
+## 🛠️ Tech Stack
+### 🔙 Backend — Spring Boot
 
-### Backend (Spring Boot)
-- Java 17+
+Java 17+
 
-- Spring Boot 3.x
+Spring Boot 3.x
 
-- Lombok (including @Slf4j for logging)
+Spring Web, DevTools
 
-- Jakarta Validation
+Lombok (with @Slf4j for logging)
 
-- Custom Exception Handling
+Jakarta Bean Validation (@Valid, @NotBlank, @Min)
 
-- Global Exception Handling
+Global Exception Handling
 
-- Observer Design Pattern (for low-stock alerts)
+Observer Design Pattern (low-stock alert system)
 
-- File-based persistence (local JSON file)
+Multi-Warehouse Support
 
-### Frontend (React + Vite)
-- React 18+
-- Vite
-- JavaScript (ES6+)
-- Fetch API for backend communication
-- Simple UI for product viewing
+File-based JSON persistence using Jackson
 
-## Project Structure
+### 🔜 Frontend — React + Vite
+
+React 18+
+
+Vite for fast dev builds
+
+JavaScript (ES6+)
+
+Fetch API for backend communication
+
+Simple UI to display product inventory
+
+## 📁 Project Structure
+
 Koorier-ProblemStatement/
-│
+
 ├── backend/
-│ └── warehouse-inventory-tracker/ # Backend (Spring Boot)
-│
+
+│   └── warehouse-inventory-tracker/   # Spring Boot backend
+
 ├── frontend/
-│ └── warehouse-frontend/ # Frontend (React + Vite)
-│
-└── README.md # You're here!
 
-# Project setup
+│   └── warehouse-frontend/            # React + Vite frontend
 
-- Spring Boot project generated using Spring Initializr
-- Dependencies added: Spring Web, Spring Boot DevTools, Lombok, Validation
-- added Product model class
-- added DTOs (Data Transfer Objects) implemented to handle product data
-- POST /api/v1/products - Add a new product to the inventory
-- Request body is validated using: @NotBlank, @Min, @Valid
-- Endpoint tested successfully using tools Postman
-- GET /api/v1/products - Fetch the list of all products - 200 OK with a list of products
+└── README.md
 
-# Progress
-- Implemented Observer pattern for event-driven stock alerts.
-- Added APIs for receiveShipment (add Qty) and fulfillOrder (decrease Qty).
-- Enhanced GlobalExceptionHandler for invalid product and stock errors.
-- Verified workflow with sample POST/PUT requests.
-- Added getOrderById API and tested with POSTMAN.
+🚀 Backend Setup Instructions
+✅ Prerequisites
 
-  # Crud Operations
-- POST | /api/v1/products | Add new product |
+Java 17+
+
+Maven 3.x
+
+IDE (IntelliJ, VSCode, Eclipse)
+
+🔧 Build & Run
+From inside backend/warehouse-inventory-tracker/
+mvn clean install
+mvn spring-boot:run
+
+
+The backend will run at: http://localhost:8080
+
+## 🌐 API Endpoints
+
+All endpoints are prefixed with /api/v1/products
+
+### 🟩 Create Product
+POST /api/v1/products
+
 {
-  "name": "Monitor",
-  "quantity": 10,
-  "reorderThreshold": 5
-}
 
-- PUT  | /api/v1/products/shipment | Receive shipment |
-{
-  "productId": "SKU-bdb59158",
-  "quantity": 5
-}
-
-- PUT  | /api/v1/products/order | Fulfill order |
-{
-  "productId": "SKU-bdb59158",
-  "quantity": 3
-}
-
-- GET  | /api/v1/products | Get all products |
-- GET  | /api/v1/products/{id} | Get product by ID |
-- PUT  | /api/v1/products/update/{id} | Update product |
-- DELETE | /api/v1/products/delete/{id} | Delete product |
-
-
-# Persistent Storage Using File Serialization
-- Product inventory data is persisted locally in a JSON file (warehouse_inventory.json) using Jackson.
-
-- Inventory is saved automatically on each update to ensure data durability.
-
-- On application startup, the inventory is loaded from the JSON file if it exists, otherwise starts freshly.
-
-- Logging is used to track persistence events:
-
-- log.info for successful saves and loads
-
-- log.error for errors during file operations
-
-# Added basic frontend 
-- View all products in a table
-
-- Fetch button to load products from the backend
-
-# Implementing Multi-Warehouse Support
-- Changed how products are stored: now each warehouse has its own product list, so we can manage multiple warehouses separately.
-
-- When adding a new product, we now also save which warehouse it belongs to, using the warehouseId from the requestDto.
-
-
+    "name": "Laptop",
   
+    "quantity": 10,
+  
+    "reorderThreshold": 3,
+  
+    "warehouseId": "PUNE-411004"
+  
+}
+
+### 📦 Receive Shipment (increse quantity)
+PUT /api/v1/products/shipment
+
+{
+
+    "productId": "SKU-1d28d303",
+    "quantity": 10,
+    "warehouseId": "PUNE-411004"
+}
+
+### 📤 Fulfill Order (decrease quantity)
+PUT /api/v1/products/order
+
+{
+
+    "productId": "SKU-1d28d303",
+    "quantity": 18,
+    "warehouseId": "PUNE-411004"
+}
+
+### 🔔 Response (with low-stock alert)
+{
+     
+      "product": {
+          "productId": "SKU-1d28d303",
+          "name": "Laptop",
+          "quantity": 2,
+          "reorderThreshold": 3
+      },
+      "alert": "Restock Alert: Low stock for Laptop (Remaining: 2)"
+}
+
+### 🔍 Get All Products
+GET /api/v1/products
+
+### 📍 Get Products by Warehouse
+GET /api/v1/products/warehouse/{warehouseId}
+
+### 🔎 Get Product by ID
+GET /api/v1/products/{id}
+
+### ✏️ Update Product
+PUT /api/v1/products/update/{id}
+
+{
+  
+    "name": "MacBook",
+    "quantity": 100,
+    "reorderThreshold": 20,
+    "warehouseId": "PUNE-411004"
+}
+
+### ❌ Delete Product
+DELETE /api/v1/products/delete/{id}
+
+🧠 Key Features
+### 🔁 Multi-Warehouse Support
+
+Each warehouse manages its own product map.
+
+All APIs are warehouse-aware using warehouseId.
+
+### 💾 Persistent Storage
+
+Products are saved to a local file warehouse_inventory.json.
+
+Automatically loaded on application startup.
+
+Uses Jackson for serialization.
+
+### 📉 Low Stock Alerts
+
+Observer pattern triggers alert when quantity < reorder threshold.
+
+Alerts returned in response (not just logs) via FulfillmentResponse.
+
+### 🧪 Validation & Error Handling
+
+@Valid, @NotBlank, @Min used to validate incoming data.
+
+Custom exceptions:
+
+ProductNotFoundException
+
+InsufficientStockException
+
+### Global exception handler returns structured error responses.
+
+## 👨‍💻 Frontend Overview
+Setup Instructions
+cd frontend/warehouse-frontend
+npm install
+npm run dev
+
+
+Runs at: http://localhost:5173
+
+Communicates with backend (http://localhost:8080)
+
+Shows all products in a simple table
+
+Button to fetch products from backend
+
+## 📝 Author
+
+Developed by Vishal Patil as part of the Koorier Problem Statement challenge.
