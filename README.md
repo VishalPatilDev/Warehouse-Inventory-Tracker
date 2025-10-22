@@ -254,25 +254,38 @@ React Hooks Used:
 
 - Axios — for API calls
 
-## Sample Frontend Screens
-- <img width="1920" height="1080" alt="Screenshot (120)" src="https://github.com/user-attachments/assets/db97d3d3-3c12-4acb-a022-6c740d772264" />
-- <img width="1920" height="1080" alt="Screenshot (121)" src="https://github.com/user-attachments/assets/3de8904e-85c4-42f0-b522-c06b0b0f74d7" />
-- <img width="1920" height="1080" alt="Screenshot (122)" src="https://github.com/user-attachments/assets/eee3170d-7b19-4064-be30-7fd410cf0bee" />
-- <img width="1920" height="1080" alt="Screenshot (123)" src="https://github.com/user-attachments/assets/c1ac1252-bbcc-4341-9596-374680eb8673" />
-- <img width="1920" height="1080" alt="Screenshot (124)" src="https://github.com/user-attachments/assets/7514b153-0856-4a7e-a060-1dea0d5f1718" />
-- <img width="1920" height="1080" alt="Screenshot (125)" src="https://github.com/user-attachments/assets/1a0b70b4-955c-46f6-b49e-a7c8389307c5" />
-- <img width="1920" height="1080" alt="Screenshot (126)" src="https://github.com/user-attachments/assets/6aa60f99-d85c-4aa2-86c6-ca47dc4d79c9" />
-- <img width="1920" height="1080" alt="Screenshot (127)" src="https://github.com/user-attachments/assets/4795597b-0c83-4c2a-b8d4-64741915940c" />
-- <img width="1920" height="1080" alt="Screenshot (128)" src="https://github.com/user-attachments/assets/6a825451-9e13-436f-9375-0e348377b454" />
+## 🖥️ Sample Frontend Screens
 
+### 🔐 Dashboard
+| Dashboard |
+|----------------------------|
+| <img width="500" src="https://github.com/user-attachments/assets/db97d3d3-3c12-4acb-a022-6c740d772264" /> |
 
+---
 
+### 🏷️ Product Management
+| All Products | Add Product |
+|---------------|-------------|
+| <img width="500" src="https://github.com/user-attachments/assets/eee3170d-7b19-4064-be30-7fd410cf0bee" /> | <img width="500" src="https://github.com/user-attachments/assets/c1ac1252-bbcc-4341-9596-374680eb8673" /> |
 
+---
 
+### 🚚 Inventory Operations
+| Receive Shipment | Fulfill Order |
+|------------------|----------------|
+| <img width="500" src="https://github.com/user-attachments/assets/7514b153-0856-4a7e-a060-1dea0d5f1718" /> | <img width="500" src="https://github.com/user-attachments/assets/1a0b70b4-955c-46f6-b49e-a7c8389307c5" /> |
 
+---
 
+### 🏬 Warehouse Filtering & Alerts
+| Warehouse Filter | Low Stock Alert |
+|------------------|----------------|
+| <img width="500" src="https://github.com/user-attachments/assets/6aa60f99-d85c-4aa2-86c6-ca47dc4d79c9" /> | <img width="500" src="https://github.com/user-attachments/assets/4795597b-0c83-4c2a-b8d4-64741915940c" /> |
 
+---
 
+### 🧾 Final Overview
+<img width="1000" src="https://github.com/user-attachments/assets/6a825451-9e13-436f-9375-0e348377b454" />
 
 ## 📝 Author
 
