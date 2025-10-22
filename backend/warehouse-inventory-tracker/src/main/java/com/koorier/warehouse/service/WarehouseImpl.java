@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.koorier.warehouse.custom_exception.InsufficientStockException;
@@ -47,7 +48,7 @@ public class WarehouseImpl implements Warehouse{
 	    public void init() {
 	        // register alert observer
 	        observers.add(alertService);
-//	        loadInventoryFromFile();
+	        loadInventoryFromFile();
 	    }
 	 
 	 private Map<String,Product> getProductsFromWare(String wareID){
@@ -68,6 +69,9 @@ public class WarehouseImpl implements Warehouse{
 	                .quantity(dto.getQuantity())
 	                .reorderThreshold(dto.getReorderThreshold())
 	                .build();
+	        if(p.getQuantity()<p.getReorderThreshold()) {
+	        	observers.forEach(o->o.onLowStock(p));
+	        }
 	        store.put(id, p);
 //	        System.out.println("Product Added - "+p.getName());
 	        log.info("{} -  Product Added !",p.getName());
@@ -167,6 +171,9 @@ public class WarehouseImpl implements Warehouse{
 	        p.setReorderThreshold(request.getReorderThreshold());
 
 	        saveInventoryToFile();
+	        if(p.getQuantity()<p.getReorderThreshold()) {
+	        	observers.forEach(o->o.onLowStock(p));
+	        }
 	        
 	        return ProductResponseDto.builder()
 	                .productId(p.getProductId())
@@ -207,9 +214,13 @@ public class WarehouseImpl implements Warehouse{
             return;
         }
         try {
-            Map<String,Map<String, Product>> loaded = objectMapper.readValue(file,
-                    objectMapper.getTypeFactory().constructMapType(Map.class, String.class, objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Product.class).getClass()));
-            /*store*/warehouses.putAll(loaded);
+            Map<String,Map<String, Product>> loaded = objectMapper.readValue(
+//            		file,
+//                    objectMapper.getTypeFactory().constructMapType(Map.class, String.class, objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Product.class).getClass()));
+
+            		 file,
+                     new TypeReference<Map<String, Map<String, Product>>>() {});
+          /*store*/warehouses.putAll(loaded);
             log.info("Inventory loaded: {} products", loaded.size());
         } catch (Exception e) {
             log.error("Error loading inventory: {}", e.getMessage());

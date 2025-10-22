@@ -1,0 +1,21 @@
+# docker-compose.yml
+version: "3.9"
+
+services:
+  backend:
+    build: 
+      context: ./backend/warehouse-inventory-tracker
+    container_name: warehouse-backend
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: 
+      context: ./frontend/warehouse-frontend
+    container_name: warehouse-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:8080

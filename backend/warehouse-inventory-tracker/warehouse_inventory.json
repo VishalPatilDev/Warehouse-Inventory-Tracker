@@ -1,9 +1,17 @@
 {
+  "Delhi" : {
+    "SKU-7963473c" : {
+      "productId" : "SKU-7963473c",
+      "name" : "MacBook",
+      "quantity" : 15,
+      "reorderThreshold" : 20
+    }
+  },
   "PUNE-411004" : {
     "SKU-3918556d" : {
       "productId" : "SKU-3918556d",
       "name" : "Laptop",
-      "quantity" : 10,
+      "quantity" : 1,
       "reorderThreshold" : 3
     },
     "SKU-14ab8463" : {
@@ -11,6 +19,35 @@
       "name" : "Laptop",
       "quantity" : 10,
       "reorderThreshold" : 3
+    },
+    "SKU-228df76b" : {
+      "productId" : "SKU-228df76b",
+      "name" : "Gaming Keyboard",
+      "quantity" : 100,
+      "reorderThreshold" : 20
+    },
+    "SKU-1d28d303" : {
+      "productId" : "SKU-1d28d303",
+      "name" : "MacBook",
+      "quantity" : 100,
+      "reorderThreshold" : 20
+    }
+  },
+  "PUNE-411003" : { },
+  "MUMBAI" : {
+    "SKU-fc5146a6" : {
+      "productId" : "SKU-fc5146a6",
+      "name" : "Iphone17ProMax",
+      "quantity" : 10,
+      "reorderThreshold" : 45
+    }
+  },
+  "PUNE" : {
+    "SKU-bfbd8d01" : {
+      "productId" : "SKU-bfbd8d01",
+      "name" : "monitor",
+      "quantity" : 2,
+      "reorderThreshold" : 1
     }
   }
 }
