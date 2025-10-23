@@ -7,6 +7,7 @@
       "reorderThreshold" : 20
     }
   },
+  "p" : { },
   "PUNE-411004" : {
     "SKU-3918556d" : {
       "productId" : "SKU-3918556d",
@@ -33,6 +34,7 @@
       "reorderThreshold" : 20
     }
   },
+  "DELHI" : { },
   "PUNE-411003" : { },
   "MUMBAI" : {
     "SKU-fc5146a6" : {
@@ -40,6 +42,14 @@
       "name" : "Iphone17ProMax",
       "quantity" : 10,
       "reorderThreshold" : 45
+    }
+  },
+  "Pune-411004" : {
+    "SKU-cb72ef21" : {
+      "productId" : "SKU-cb72ef21",
+      "name" : "Mac",
+      "quantity" : 150,
+      "reorderThreshold" : 15
     }
   },
   "PUNE" : {

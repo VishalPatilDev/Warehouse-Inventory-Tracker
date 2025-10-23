@@ -3,7 +3,7 @@
 A full-stack inventory management system for tracking products across multiple warehouses. Built with Spring Boot (Java 17) on the backend and React + Vite on the frontend. Supports CRUD operations, persistent storage, low-stock alerts, and warehouse-specific inventory.
 
 ## 🛠️ Tech Stack
-### 🔙 Backend — Spring Boot
+## 🔙 Backend — Spring Boot
 
 Java 17+
 
@@ -23,7 +23,7 @@ Multi-Warehouse Support
 
 File-based JSON persistence using Jackson
 
-### 🔜 Frontend — React + Vite
+## 🔜 Frontend — React + Vite
 
 React 18+
 
@@ -31,40 +31,96 @@ Vite for fast dev builds
 
 JavaScript (ES6+)
 
-Fetch API for backend communication
+Axios for backend communication
 
-Simple UI to display product inventory
+Simple UI for inventory operations
+
+Dynamic table view with live updates
+
+## 🐳 Dockerized Setup
+
+Separate Dockerfiles for backend and frontend
+
+docker-compose.yml for one-command multi-container setup
+
+Exposes:
+
+    - Backend → http://localhost:8080
+
+    - Frontend → http://localhost:5173
 
 ## 📁 Project Structure
 
-Koorier-ProblemStatement/
 
-├── backend/
+    Koorier-ProblemStatement/
+    ├── backend/
+    │   └── warehouse-inventory-tracker/
+    │       ├── Dockerfile             # Backend Docker image
+    │       ├── src/
+    │       └── pom.xml
+    │
+    ├── frontend/
+    │   └── warehouse-frontend/
+    │       ├── Dockerfile             # Frontend Docker image
+    │       ├── src/
+    │       ├── package.json
+    │       └── vite.config.js
+    │
+    ├── docker-compose.yml             # Multi-container orchestration
+    └── README.md
 
-│   └── warehouse-inventory-tracker/   # Spring Boot backend
-
-├── frontend/
-
-│   └── warehouse-frontend/            # React + Vite frontend
-
-└── README.md
-
-🚀 Backend Setup Instructions
+## 🚀 Running the Project
+### 🧰 Option 1 — Manual Setup (Without Docker)
 ✅ Prerequisites
 
 Java 17+
 
 Maven 3.x
 
-IDE (IntelliJ, VSCode, Eclipse)
+Node.js 18+
 
-🔧 Build & Run
-From inside backend/warehouse-inventory-tracker/
-mvn clean install
-mvn spring-boot:run
+IDE (IntelliJ / VS Code)
+
+🔧 Backend Setup
+cd backend/warehouse-inventory-tracker
+
+    mvn clean install
+    mvn spring-boot:run
 
 
-The backend will run at: http://localhost:8080
+Backend runs on 👉 http://localhost:8080
+
+💻 Frontend Setup
+cd frontend/warehouse-frontend
+
+    npm install
+    npm run dev
+
+
+Frontend runs on 👉 http://localhost:5173
+
+### 🐳 Option 2 — Dockerized Setup (Recommended)
+⚙️ Prerequisites
+
+Docker Desktop
+
+Docker Compose
+
+▶️ Run with a single command
+
+From project root:
+
+    docker-compose up --build
+
+💥 That’s it!
+
+Backend: http://localhost:8080
+
+Frontend: http://localhost:5173
+
+🧹 Stop containers
+
+    docker-compose down
 
 ## 🌐 API Endpoints
 
@@ -167,26 +223,77 @@ Alerts returned in response (not just logs) via FulfillmentResponse.
 
 Custom exceptions:
 
-ProductNotFoundException
+- ProductNotFoundException
 
-InsufficientStockException
+- InsufficientStockException
 
 ### Global exception handler returns structured error responses.
 
-## 👨‍💻 Frontend Overview
-Setup Instructions
-cd frontend/warehouse-frontend
-npm install
-npm run dev
+## 💻 Frontend Overview
+Core Functions:
 
+- Fetch All Products
 
-Runs at: http://localhost:5173
+- Add Product
 
-Communicates with backend (http://localhost:8080)
+- Receive Shipment
 
-Shows all products in a simple table
+- Fulfill Order (with alerts)
 
-Button to fetch products from backend
+- Update Product
+
+- Delete Product
+
+- Filter by Warehouse
+
+Architecture Updates:
+
+- Refactored into modular React components (ProductForm, ShipmentForm, OrderForm, UpdateProductForm, DeleteProductForm, WarehouseFilterForm)
+- Centralized state management using React Context API for cleaner state sharing and easier maintenance
+- Improved code organization and separation of concerns
+
+React Hooks Used:
+
+- useState — for form and data management
+
+- useEffect — for dynamic updates
+
+- useContext — for accessing shared product state and API actions
+
+- Axios — for API calls
+
+## 🖥️ Sample Frontend Screens
+
+### 🔐 Dashboard
+| Dashboard |
+|----------------------------|
+| <img width="500" src="https://github.com/user-attachments/assets/db97d3d3-3c12-4acb-a022-6c740d772264" /> |
+
+---
+
+### 🏷️ Product Management
+| All Products | Add Product |
+|---------------|-------------|
+| <img width="500" src="https://github.com/user-attachments/assets/eee3170d-7b19-4064-be30-7fd410cf0bee" /> | <img width="500" src="https://github.com/user-attachments/assets/c1ac1252-bbcc-4341-9596-374680eb8673" /> |
+
+---
+
+### 🚚 Inventory Operations
+| Receive Shipment | Fulfill Order |
+|------------------|----------------|
+| <img width="500" src="https://github.com/user-attachments/assets/7514b153-0856-4a7e-a060-1dea0d5f1718" /> | <img width="500" src="https://github.com/user-attachments/assets/1a0b70b4-955c-46f6-b49e-a7c8389307c5" /> |
+
+---
+
+### 🏬 Warehouse Filtering & Alerts
+| Warehouse Filter | Low Stock Alert |
+|------------------|----------------|
+| <img width="500" src="https://github.com/user-attachments/assets/6aa60f99-d85c-4aa2-86c6-ca47dc4d79c9" /> | <img width="500" src="https://github.com/user-attachments/assets/4795597b-0c83-4c2a-b8d4-64741915940c" /> |
+
+---
+
+### 🧾 Final Overview
+<img width="1000" src="https://github.com/user-attachments/assets/6a825451-9e13-436f-9375-0e348377b454" />
 
 ## 📝 Author
 
