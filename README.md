@@ -246,26 +246,20 @@ Core Functions:
 
 - Filter by Warehouse
 
-<<<<<<< HEAD
 Architecture Updates:
 
 - Refactored into modular React components (ProductForm, ShipmentForm, OrderForm, UpdateProductForm, DeleteProductForm, WarehouseFilterForm)
 - Centralized state management using React Context API for cleaner state sharing and easier maintenance
 - Improved code organization and separation of concerns
 
-=======
->>>>>>> 1bff047bb24624a2b527c0a89f10d5021e62a660
 React Hooks Used:
 
 - useState — for form and data management
 
 - useEffect — for dynamic updates
 
-<<<<<<< HEAD
 - useContext — for accessing shared product state and API actions
 
-=======
->>>>>>> 1bff047bb24624a2b527c0a89f10d5021e62a660
 - Axios — for API calls
 
 ## 🖥️ Sample Frontend Screens
